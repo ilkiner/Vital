@@ -1,107 +1,133 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useTranslations } from "next-intl";
 import { siteConfig } from "@/lib/site-config";
-import { WordReveal } from "@/components/ui/WordReveal";
-
-const ease = [0.25, 0.46, 0.45, 0.94] as const;
-
-const POST_BG_STYLES = [
-  { background: "color-mix(in srgb, #EBF5FA 80%, #F0F8FC)" },
-  { background: "#F5F4F2" },
-  { background: "color-mix(in srgb, #EBF5FA 50%, white)" },
-  { background: "#FAFAF8" },
-  { background: "color-mix(in srgb, #F0F8FC 70%, white)" },
-  { background: "#F5F4F2" },
-] as const;
-
-const PLACEHOLDER_POSTS = Array.from({ length: 6 }, (_, i) => ({
-  id: i + 1,
-  style: POST_BG_STYLES[i],
-}));
 
 type Props = { locale: "az" | "ru" };
 
+const ease = [0.25, 0.46, 0.45, 0.94] as const;
+
+const MOCK_COLORS = [
+  "linear-gradient(135deg, #EBF5FA 0%, #C2E6F0 100%)",
+  "linear-gradient(135deg, #F0F8FC 0%, #D4EEF7 100%)",
+  "linear-gradient(135deg, #EDF6FA 0%, #BDE4F4 100%)",
+  "linear-gradient(135deg, #F5F8FA 0%, #DAEEF7 100%)",
+  "linear-gradient(135deg, #E8F4FA 0%, #C8E8F5 100%)",
+  "linear-gradient(135deg, #F2F8FB 0%, #D0EAF5 100%)",
+];
+
 export default function InstagramSection({ locale }: Props) {
-  const t = useTranslations("home");
   const reduced = useReducedMotion() ?? false;
 
   if (!siteConfig.social.instagram) return null;
 
-  const headerAnim = reduced
-    ? {}
-    : {
-        initial: { opacity: 0, y: 16 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "-48px" },
-        transition: { duration: 0.5, ease },
-      };
+  const copy = {
+    eyebrow: locale === "az" ? "Sosial şəbəkə" : "Социальные сети",
+    heading: locale === "az" ? "Bizi izləyin" : "Подписывайтесь",
+    sub: locale === "az"
+      ? "Yeni müalicə metodları, həkim tövsiyələri və klinika xəbərləri üçün Instagram-da izlə."
+      : "Следите за нами в Instagram, чтобы узнавать о новых методах лечения, советах врачей и новостях клиники.",
+    cta: locale === "az" ? "Instagram-da izlə" : "Подписаться в Instagram",
+    handle: "@vitalife.klinika",
+    photoHint: locale === "az" ? "Son paylaşımlar" : "Последние публикации",
+  };
 
-  const cellAnim = (i: number) =>
-    reduced
-      ? {}
-      : {
-          initial: { opacity: 0, scale: 0.94 },
-          whileInView: { opacity: 1, scale: 1 },
-          viewport: { once: true, margin: "-32px" },
-          transition: { duration: 0.38, delay: i * 0.06, ease },
-        };
+  const wrapAnim = reduced ? {} : {
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-60px" },
+    transition: { duration: 0.55, ease },
+  };
 
-  const ctaAnim = reduced
-    ? {}
-    : {
-        initial: { opacity: 0 },
-        whileInView: { opacity: 1 },
-        viewport: { once: true },
-        transition: { duration: 0.5, delay: 0.28 },
-      };
+  const cellAnim = (i: number) => reduced ? {} : {
+    initial: { opacity: 0, scale: 0.92 },
+    whileInView: { opacity: 1, scale: 1 },
+    viewport: { once: true, margin: "-32px" },
+    transition: { duration: 0.4, delay: 0.1 + i * 0.06, ease },
+  };
 
   return (
-    <section className="py-16 md:py-20 bg-[var(--color-surface-alt)] border-t border-[var(--color-border-light)]">
+    <section className="section-padding bg-[var(--color-surface-alt)] border-t border-[var(--color-border-light)]">
       <div className="container-page">
-        <motion.div className="text-center mb-10" {...headerAnim}>
-          <h2 className="font-display text-[1.75rem] md:text-[2.1rem] font-medium text-[var(--color-text)]">
-            <WordReveal text={t("instagramTitle")} delay={0.05} />
-          </h2>
-          <a
-            href={siteConfig.social.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 mt-2 text-[var(--color-primary)] text-sm font-medium hover:underline"
-          >
-            <InstagramIcon />
-            {t("instagramHandle")}
-          </a>
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
-          {PLACEHOLDER_POSTS.map((post, i) => (
-            <motion.a
-              key={post.id}
-              href={siteConfig.social.instagram!}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={post.style}
-              className="rounded-xl aspect-square flex items-center justify-center group overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-primary)] transition-colors duration-200"
-              {...cellAnim(i)}
-            >
-              <InstagramIcon className="w-8 h-8 text-[var(--color-text-subtle)] group-hover:text-[var(--color-primary)] transition-colors duration-200" />
-            </motion.a>
-          ))}
+          {/* ── LEFT: CTA text ── */}
+          <motion.div {...wrapAnim}>
+            <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-[var(--color-primary-500)] mb-3">
+              {copy.eyebrow}
+            </span>
+
+            <h2 className="font-display text-[2rem] md:text-[2.6rem] font-medium text-[var(--color-text)] leading-[1.1] mb-5">
+              {copy.heading}
+            </h2>
+
+            <p className="text-[var(--color-text-muted)] text-[1rem] leading-[1.8] mb-8 max-w-[400px]">
+              {copy.sub}
+            </p>
+
+            {/* Handle chip */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--color-border)] bg-white mb-6">
+              <InstagramIcon className="w-4 h-4 text-[#E1306C]" />
+              <span className="text-[0.85rem] font-semibold text-[var(--color-text)]">
+                {copy.handle}
+              </span>
+            </div>
+
+            <div className="block">
+              <a
+                href={siteConfig.social.instagram!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:opacity-90"
+                style={{
+                  background: "linear-gradient(135deg, #405DE6 0%, #833AB4 40%, #C13584 70%, #E1306C 100%)",
+                }}
+              >
+                <InstagramIcon className="w-4 h-4 text-white" />
+                {copy.cta}
+              </a>
+            </div>
+          </motion.div>
+
+          {/* ── RIGHT: Photo grid ── */}
+          <div>
+            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-subtle)] mb-4">
+              {copy.photoHint}
+            </p>
+
+            <div className="grid grid-cols-3 gap-2.5">
+              {MOCK_COLORS.map((bg, i) => (
+                <motion.a
+                  key={i}
+                  href={siteConfig.social.instagram!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative rounded-xl overflow-hidden aspect-square group"
+                  style={{ background: bg }}
+                  {...cellAnim(i)}
+                >
+                  {/* Center icon */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-25 group-hover:opacity-50 transition-opacity duration-200">
+                    <InstagramIcon className="w-7 h-7 text-[var(--color-primary)]" />
+                  </div>
+
+                  {/* Hover overlay */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                    style={{ background: "rgba(20,80,110,0.12)" }}
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </div>
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          </div>
+
         </div>
-
-        <motion.div className="text-center mt-8" {...ctaAnim}>
-          <a
-            href={siteConfig.social.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-[var(--color-border)] text-sm font-medium text-[var(--color-text-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors duration-200"
-          >
-            <InstagramIcon className="w-4 h-4" />
-            {locale === "az" ? "Instagram-da izlə" : "Подписаться в Instagram"}
-          </a>
-        </motion.div>
       </div>
     </section>
   );

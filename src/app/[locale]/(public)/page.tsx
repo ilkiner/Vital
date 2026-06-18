@@ -7,6 +7,7 @@ import WhyVitalife from "@/components/home/WhyVitalife";
 import ChiefDoctor from "@/components/home/ChiefDoctor";
 import ClinicParallax from "@/components/home/ClinicParallax";
 import InstagramSection from "@/components/home/InstagramSection";
+import Testimonials from "@/components/home/Testimonials";
 import { createServerSupabaseClient } from "@/lib/supabaseServer";
 import { FALLBACK_DOCTORS, FALLBACK_SERVICES } from "@/lib/fallback-data";
 
@@ -57,6 +58,7 @@ export default async function HomePage() {
       <WeeklyDoctors doctors={doctors} locale={locale} />
       <ClinicParallax locale={locale} />
       <ChiefDoctor locale={locale} />
+      <Testimonials locale={locale} />
       <InstagramSection locale={locale} />
     </>
   );
