@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "services": "Xidmətlər",
+    "doctors": "Həkimlər",
+    "pricing": "Qiymətlər",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə"
+  },
+  "hero": {
+    "cta": "Bizimlə Əlaqə"
+  },
+  "home": {
+    "weeklyDoctors": "Bu Həftənin Həkimləri",
+    "viewProfile": "Profili Gör",
+    "instagramTitle": "Bizi İzləyin",
+    "instagramHandle": "@vitalife.klinika"
+  },
+  "about": {
+    "title": "Haqqımızda",
+    "visionTitle": "Missiyamız",
+    "hygieneTitle": "Sterilizasiya və Gigiyena",
+    "chiefDoctorTitle": "Baş Həkim"
+  },
+  "services": {
+    "title": "Xidmətlərimiz"
+  },
+  "pricing": {
+    "title": "Qiymət Cədvəli",
+    "askPrice": "Qiymət üçün soruşun",
+    "contactCta": "Soruş"
+  },
+  "contact": {
+    "title": "Əlaqə",
+    "hoursTitle": "İş Saatları",
+    "formTitle": "Mesaj Göndərin",
+    "nameLabel": "Ad Soyad",
+    "phoneLabel": "Telefon",
+    "emailLabel": "E-poçt",
+    "messageLabel": "Mesajınız",
+    "preferWhatsApp": "Cavabı WhatsApp üzərindən almaq istəyirəm",
+    "preferEmail": "Cavabı E-poçt ilə almaq istəyirəm",
+    "submit": "Göndər",
+    "successMessage": "Mesajınız göndərildi! Qısa müddətdə sizinlə əlaqə saxlayacağıq.",
+    "errorMessage": "Göndərmə zamanı xəta baş verdi. Zəhmət olmasa yenidən cəhd edin."
+  },
+  "doctor": {
+    "specialty": "İxtisas",
+    "askQuestion": "Sual ver",
+    "guestBadge": "Dəvətli Həkim",
+    "schedule": "Klinikadakı iş günləri"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "doctorsTab": "Həkimlər",
+    "servicesTab": "Xidmətlər",
+    "pricingTab": "Qiymətlər",
+    "logout": "Çıxış"
+  },
+  "footer": {
+    "rights": "Bütün hüquqlar qorunur"
+  },
+  "common": {
+    "loading": "Yüklənir...",
+    "error": "Xəta baş verdi",
+    "save": "Yadda saxla",
+    "cancel": "Ləğv et",
+    "delete": "Sil",
+    "edit": "Düzəliş et",
+    "add": "Əlavə et"
+  }
+}

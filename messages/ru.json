@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "services": "Услуги",
+    "doctors": "Врачи",
+    "pricing": "Цены",
+    "about": "О нас",
+    "contact": "Контакты"
+  },
+  "hero": {
+    "cta": "Связаться с нами"
+  },
+  "home": {
+    "weeklyDoctors": "Врачи этой недели",
+    "viewProfile": "Смотреть профиль",
+    "instagramTitle": "Следите за нами",
+    "instagramHandle": "@vitalife.klinika"
+  },
+  "about": {
+    "title": "О нас",
+    "visionTitle": "Наша миссия",
+    "hygieneTitle": "Стерилизация и гигиена",
+    "chiefDoctorTitle": "Главный врач"
+  },
+  "services": {
+    "title": "Наши услуги"
+  },
+  "pricing": {
+    "title": "Прайс-лист",
+    "askPrice": "Спросите цену",
+    "contactCta": "Узнать"
+  },
+  "contact": {
+    "title": "Контакты",
+    "hoursTitle": "Часы работы",
+    "formTitle": "Написать нам",
+    "nameLabel": "Имя Фамилия",
+    "phoneLabel": "Телефон",
+    "emailLabel": "E-mail",
+    "messageLabel": "Сообщение",
+    "preferWhatsApp": "Хочу получить ответ через WhatsApp",
+    "preferEmail": "Хочу получить ответ по E-mail",
+    "submit": "Отправить",
+    "successMessage": "Ваше сообщение отправлено! Мы свяжемся с вами в ближайшее время.",
+    "errorMessage": "Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз."
+  },
+  "doctor": {
+    "specialty": "Специализация",
+    "askQuestion": "Задать вопрос",
+    "guestBadge": "Приглашённый врач",
+    "schedule": "Рабочие дни в клинике"
+  },
+  "admin": {
+    "title": "Панель администратора",
+    "doctorsTab": "Врачи",
+    "servicesTab": "Услуги",
+    "pricingTab": "Цены",
+    "logout": "Выйти"
+  },
+  "footer": {
+    "rights": "Все права защищены"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "add": "Добавить"
+  }
+}

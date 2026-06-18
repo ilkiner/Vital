@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography tokens */
+  --font-display: var(--font-heading), Georgia, 'Times New Roman', serif;
+  --font-sans:    var(--font-body), ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius tokens */
+  --radius-sm:  0.5rem;
+  --radius-md:  0.75rem;
+  --radius-lg:  1rem;
+  --radius-xl:  1.25rem;
+  --radius-2xl: 1.5rem;
+}
+
+/*
+  Custom color + surface tokens live in :root (NOT @theme) so that
+  Tailwind v4's arbitrary value syntax bg-[var(--color-*)] / text-[var(--color-*)]
+  generates proper declarations.
+*/
+:root {
+  /* ── Teal / Slate palette ── */
+  --color-primary:        #14506E;   /* dark teal-navy — filled buttons, headings */
+  --color-primary-600:    #0E3C54;   /* hover / darker */
+  --color-primary-500:    #4FB0C6;   /* accent — icons, links, highlights */
+  --color-primary-light:  #EBF5FA;   /* light bg tint */
+  --color-primary-muted:  #F0F8FC;   /* very light bg */
+
+  --color-surface:        #FFFFFF;
+  --color-surface-alt:    #F5F8FA;   /* page base */
+  --color-border:         #E3E9ED;
+  --color-border-light:   #EEF2F5;
+
+  --color-text:           #18242B;
+  --color-text-muted:     #4A5B66;
+  --color-text-subtle:    #7A9BAE;
+  --color-text-inverse:   #FFFFFF;
+
+  /* Light accent for rendering on dark primary background */
+  --color-accent-on-dark: #87CEDC;
+
+  /* Short-form aliases (per design spec) */
+  --bg:            #F5F8FA;
+  --surface:       #FFFFFF;
+  --primary:       #14506E;
+  --primary-hover: #0E3C54;
+  --accent:        #4FB0C6;
+  --accent-hover:  #3C93A9;
+  --text:          #18242B;
+  --muted:         #4A5B66;
+  --border:        #E3E9ED;
+}
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background-color: var(--color-surface-alt);
+    scroll-behavior: auto; /* Lenis handles smooth scrolling in JS */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    color: var(--color-text);
+    font-family: var(--font-display);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; height: auto; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .font-display { font-family: var(--font-display); }
+  .font-sans    { font-family: var(--font-sans); }
+
+  .container-page {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page { padding-inline: 2rem; }
+  }
+
+  .section-padding {
+    padding-block: 4rem;
+  }
+  @media (min-width: 768px) {
+    .section-padding { padding-block: 5rem; }
+  }
+  @media (min-width: 1024px) {
+    .section-padding { padding-block: 6rem; }
+  }
+}
