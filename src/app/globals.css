@@ -78,6 +78,14 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 
+  /* ── Reusable gradient backgrounds ── */
+  .bg-soft-blue {
+    background: linear-gradient(160deg, #EBF5FA 0%, #F2F8FC 50%, #FFFFFF 100%);
+  }
+  .bg-deep-blue {
+    background: linear-gradient(135deg, #0B3448 0%, #14506E 42%, #1A6B8A 78%, #1E7498 100%);
+  }
+
   .font-display { font-family: var(--font-display); }
   .font-sans    { font-family: var(--font-sans); }
 

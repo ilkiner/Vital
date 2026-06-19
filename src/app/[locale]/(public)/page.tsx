@@ -8,6 +8,7 @@ import ChiefDoctor from "@/components/home/ChiefDoctor";
 import ClinicParallax from "@/components/home/ClinicParallax";
 import InstagramSection from "@/components/home/InstagramSection";
 import Testimonials from "@/components/home/Testimonials";
+import CtaBand from "@/components/home/CtaBand";
 import { createServerSupabaseClient } from "@/lib/supabaseServer";
 import { FALLBACK_DOCTORS, FALLBACK_SERVICES } from "@/lib/fallback-data";
 
@@ -60,6 +61,7 @@ export default async function HomePage() {
       <ChiefDoctor locale={locale} />
       <Testimonials locale={locale} />
       <InstagramSection locale={locale} />
+      <CtaBand locale={locale} />
     </>
   );
 }

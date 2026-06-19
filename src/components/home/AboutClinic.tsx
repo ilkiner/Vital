@@ -70,7 +70,7 @@ export default function AboutClinic({ locale }: Props) {
         };
 
   return (
-    <section className="section-padding bg-[var(--color-surface)] border-t border-[var(--color-border-light)]">
+    <section className="section-padding bg-soft-blue border-t border-[var(--color-border-light)]">
       <div className="container-page">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
 
