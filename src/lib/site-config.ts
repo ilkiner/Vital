@@ -7,29 +7,30 @@ export const siteConfig = {
   name: "VitaLife Klinika",
 
   contact: {
-    phone: "+994 00 000 00 00",        // TODO: gerçek numara
-    whatsapp: "994000000000",          // TODO: ülke kodu + numara, + ve boşluk olmadan (wa.me linki için)
-    email: "info@vitalife.az",          // TODO: kliniğin alıcı mail adresi
+    phone: "242 77 78 78",             // klinika xətti (Mingəçevir)
+    mobile: "+994 77 750 55 45",       // mobil
+    whatsapp: "994777505545",          // wa.me linki üçün (+ və boşluqsuz)
+    email: "vitalifeklinika@gmail.com",
     address: {
-      az: "Bakı şəhəri, [küçə adı], [ev nömrəsi], Azərbaycan",
-      ru: "г. Баку, [улица], [дом], Азербайджан",
+      az: "Mingəçevir şəhəri, Əliağa Vahid küçəsi 15, giriş 25",
+      ru: "г. Мингечевир, ул. Элийага Вахид, 15, вход 25",
     } satisfies Localized,
   },
 
   // Çalışma saatleri — tablo olarak render edilebilir
   hours: [
-    { az: "Bazar ertəsi – Cümə", ru: "Понедельник – Пятница", time: "09:00 – 19:00" },
-    { az: "Şənbə", ru: "Суббота", time: "10:00 – 16:00" },
+    { az: "Bazar ertəsi – Şənbə", ru: "Понедельник – Суббота", time: "09:00 – 17:00" },
     { az: "Bazar", ru: "Воскресенье", time: "Bağlı / Закрыто" },
   ],
 
   social: {
     instagram: "https://www.instagram.com/vitalife.klinika",
-    facebook: null as string | null,    // TODO: varsa ekle
-    tiktok: null as string | null,
+    facebook: null as string | null,
+    tiktok: "https://www.tiktok.com/@vitalifeklinika",
   },
 
   // Google Haritalar embed iframe src'i — Maps'te "Paylaş > Yerleştir" ile alıp buraya koy
+  // Paylaş linki: https://maps.app.goo.gl/uoR9tWhxzhTMM4PD6
   googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=PLACEHOLDER",
 
   // Ana sayfa Hero
@@ -67,7 +68,7 @@ export const siteConfig = {
       az: "[Baş həkimin təcrübəsi, ixtisası və özgəçmişi buraya yazılır — yer tutucu mətn.]",
       ru: "[Опыт, специализация и биография главного врача — текст-заглушка.]",
     } satisfies Localized,
-    imageUrl: "/images/chief-doctor-placeholder.jpg", // TODO: public/images altına gerçek foto koy
+    imageUrl: "/images/chief-doctor.jpg",
   },
 } as const;
 

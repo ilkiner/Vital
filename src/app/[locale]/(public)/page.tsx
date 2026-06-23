@@ -57,7 +57,7 @@ export default async function HomePage() {
       <WhyVitalife locale={locale} />
       <ServicesOverview services={services} />
       <WeeklyDoctors doctors={doctors} locale={locale} />
-      <ClinicParallax locale={locale} />
+      <ClinicParallax locale={locale} imageUrl="/images/clinic-bg.jpg" />
       <ChiefDoctor locale={locale} />
       <Testimonials locale={locale} />
       <InstagramSection locale={locale} />

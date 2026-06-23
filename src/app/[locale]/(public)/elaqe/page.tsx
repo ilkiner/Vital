@@ -48,16 +48,22 @@ export default async function ContactPage() {
                 <SectionLabel>{locale === "az" ? "Əlaqə məlumatları" : "Контактные данные"}</SectionLabel>
                 <div className="bg-white rounded-2xl border border-[var(--color-border)] shadow-sm divide-y divide-[var(--color-border-light)]">
                   <ContactItem icon={<PhoneIcon />}>
-                    <a href={`tel:${siteConfig.contact.phone}`}
-                      className="font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
-                      {siteConfig.contact.phone}
-                    </a>
+                    <div className="flex flex-col gap-0.5">
+                      <a href={`tel:${siteConfig.contact.phone}`}
+                        className="font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
+                        {siteConfig.contact.phone}
+                      </a>
+                      <a href={`tel:${siteConfig.contact.mobile}`}
+                        className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-200">
+                        {siteConfig.contact.mobile}
+                      </a>
+                    </div>
                   </ContactItem>
                   <ContactItem icon={<WhatsAppIcon />}>
                     <a href={`https://wa.me/${siteConfig.contact.whatsapp}`}
                       target="_blank" rel="noopener noreferrer"
                       className="font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
-                      WhatsApp
+                      {siteConfig.contact.mobile}
                     </a>
                   </ContactItem>
                   <ContactItem icon={<EmailIcon />}>
