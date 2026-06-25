@@ -11,6 +11,7 @@ type Service = {
   title_ru: string;
   description_az: string | null;
   description_ru: string | null;
+  is_guest_service?: boolean;
 };
 
 type Props = { services: Service[] };
@@ -32,7 +33,7 @@ export default function ServicesOverview({ services }: Props) {
   const allLabel    = locale === "az" ? "Bütün xidmətlər" : "Все услуги";
   const sectionLabel = locale === "az" ? "Nə edirik" : "Что мы делаем";
 
-  const displayed = services.slice(0, 4);
+  const displayed = services.filter((s) => !s.is_guest_service).slice(0, 6);
 
   const headerAnim = reduced
     ? {}
@@ -91,7 +92,7 @@ export default function ServicesOverview({ services }: Props) {
         </motion.div>
 
         {/* Cards grid — stagger */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {displayed.map((svc, i) => (
             <motion.div key={svc.id} {...cardAnim(i)}>
               <Link href={servicesHref}>

@@ -9,6 +9,7 @@ type Service = {
   title_ru: string;
   description_az: string | null;
   description_ru: string | null;
+  is_guest_service?: boolean;
 };
 
 type Props = {

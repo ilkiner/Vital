@@ -1,6 +1,7 @@
 import { getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { createServerSupabaseClient } from "@/lib/supabaseServer";
+import { FALLBACK_SERVICES } from "@/lib/fallback-data";
 import ServicesAccordion from "./ServicesAccordion";
 
 export const metadata: Metadata = { title: "Xidmətlər" };
@@ -11,71 +12,30 @@ type Service = {
   title_ru: string;
   description_az: string | null;
   description_ru: string | null;
+  is_guest_service: boolean;
 };
-
-const MOCK_SERVICES: Service[] = [
-  {
-    id: "s1",
-    title_az: "Dermatoloji Müayinə",
-    title_ru: "Дерматологическое обследование",
-    description_az:
-      "Dərinin, dırnaqların və saçların hərtərəfli müayinəsi. Dermatoskopiya, biopsi, lazer müalicəsi və estetik dermatoloji prosedurlar. Akne, ekzema, psoriaz, xəbənlik kimi dərmatoz xəstəliklərin diaqnostikası və müalicəsi.",
-    description_ru:
-      "Комплексное обследование кожи, ногтей и волос. Дерматоскопия, биопсия, лазерное лечение и эстетические дерматологические процедуры. Диагностика и лечение дерматозов: акне, экзема, псориаз, депигментация.",
-  },
-  {
-    id: "s2",
-    title_az: "Kardioloji Xidmətlər",
-    title_ru: "Кардиологические услуги",
-    description_az:
-      "Ürək-damar sisteminin tam diaqnostikası: EKQ, ExoKQ, Holter monitorinq, stress testlər. Hipertansiyon, ürək çatışmazlığı, aritmiya və koronar xəstəliklərin müalicəsi. Kardiovaskulyar riski qiymətləndirmə proqramları.",
-    description_ru:
-      "Полная диагностика сердечно-сосудистой системы: ЭКГ, ЭхоКГ, холтеровское мониторирование, стресс-тесты. Лечение гипертонии, сердечной недостаточности, аритмий и коронарной болезни. Программы оценки кардиоваскулярного риска.",
-  },
-  {
-    id: "s3",
-    title_az: "Nevroloji Müalicə",
-    title_ru: "Неврологическое лечение",
-    description_az:
-      "Baş ağrısı, migren, baş gicəllənməsi, yuxu pozğunluqları, osteoxondroz, polineyropatiya kimi nevroloji xəstəliklərin diaqnostikası. MRT, ENMQ, EEQ, doppler müayinəsi. Beyinqan damarlarının vəziyyətinin qiymətləndirilməsi.",
-    description_ru:
-      "Диагностика неврологических заболеваний: головная боль, мигрень, головокружение, нарушения сна, остеохондроз, полинейропатия. МРТ, ЭНМГ, ЭЭГ, допплерография. Оценка состояния сосудов головного мозга.",
-  },
-  {
-    id: "s4",
-    title_az: "Ortopedik Xidmətlər",
-    title_ru: "Ортопедические услуги",
-    description_az:
-      "Oynaq və əzələ-skelet sisteminin xəstəlikləri: artrit, artrozlar, omurğa pozğunluqları, spor zədələri. Fizioterapiya, blokadalar, PRP terapiyası. Postoperativ reabilitasiya proqramları.",
-    description_ru:
-      "Заболевания суставов и опорно-двигательного аппарата: артрит, артроз, патологии позвоночника, спортивные травмы. Физиотерапия, блокады, PRP-терапия. Программы послеоперационной реабилитации.",
-  },
-  {
-    id: "s5",
-    title_az: "Endokrinoloji Xidmətlər",
-    title_ru: "Эндокринологические услуги",
-    description_az:
-      "Şəkərli diabet, tiroid bez xəstəlikləri, endokrin sistemin pozğunluqları, piylənmə, osteoporoz. Hormonal profil müayinəsi, hormon müalicəsi, metabolik sindromun korreksiyası.",
-    description_ru:
-      "Сахарный диабет, заболевания щитовидной железы, нарушения эндокринной системы, ожирение, остеопороз. Исследование гормонального профиля, гормональная терапия, коррекция метаболического синдрома.",
-  },
-];
 
 async function getServices(): Promise<Service[]> {
   try {
     const supabase = await createServerSupabaseClient();
     const { data } = await supabase
       .from("services")
-      .select("id, title_az, title_ru, description_az, description_ru")
+      .select("id, title_az, title_ru, description_az, description_ru, is_guest_service")
       .order("title_az");
     if (data && data.length > 0) return data as Service[];
   } catch {}
-  return MOCK_SERVICES;
+  return FALLBACK_SERVICES;
 }
 
 export default async function ServicesPage() {
   const locale = (await getLocale()) as "az" | "ru";
   const services = await getServices();
+
+  const permanent = services.filter((s) => !s.is_guest_service);
+  const guest     = services.filter((s) =>  s.is_guest_service);
+
+  const permanentLabel = locale === "az" ? "Daimi xidmətlər"            : "Постоянные услуги";
+  const guestLabel     = locale === "az" ? "Bakıdan gələn qonaq həkimlər" : "Приглашённые врачи из Баку";
 
   return (
     <div>
@@ -111,8 +71,33 @@ export default async function ServicesPage() {
       </div>
 
       <div className="bg-[var(--color-surface-alt)] section-padding">
-        <div className="container-page max-w-3xl">
-          <ServicesAccordion services={services} locale={locale} />
+        <div className="container-page max-w-3xl space-y-12">
+
+          {/* Daimi xidmətlər */}
+          {permanent.length > 0 && (
+            <section>
+              <h2 className="font-display text-xl md:text-2xl font-semibold text-[var(--color-text)] mb-6">
+                {permanentLabel}
+              </h2>
+              <ServicesAccordion services={permanent} locale={locale} />
+            </section>
+          )}
+
+          {/* Qonaq həkim xidmətləri */}
+          {guest.length > 0 && (
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <h2 className="font-display text-xl md:text-2xl font-semibold text-[var(--color-text)]">
+                  {guestLabel}
+                </h2>
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wide bg-[var(--color-primary-muted)] text-[var(--color-primary)]">
+                  {locale === "az" ? "Qonaq" : "Гость"}
+                </span>
+              </div>
+              <ServicesAccordion services={guest} locale={locale} />
+            </section>
+          )}
+
         </div>
       </div>
     </div>

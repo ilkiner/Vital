@@ -54,3 +54,9 @@ next-env.d.ts
 /design-preview.html
 /files.zip
 /plan
+.gstack/
+
+# OneDrive duplicate files
+* - Copy*
+dev.log
+skills-lock*.json

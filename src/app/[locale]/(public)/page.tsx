@@ -33,7 +33,8 @@ async function getServices() {
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from("services")
-      .select("id, title_az, title_ru, description_az, description_ru")
+      .select("id, title_az, title_ru, description_az, description_ru, is_guest_service")
+      .eq("is_guest_service", false)
       .limit(6);
 
     if (error || !data || data.length === 0) return FALLBACK_SERVICES;

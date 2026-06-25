@@ -35,46 +35,25 @@ export const FALLBACK_DOCTORS = [
 ];
 
 export const FALLBACK_SERVICES = [
-  {
-    id: "fallback-svc-1",
-    title_az: "Kardioloji yoxlama",
-    title_ru: "Кардиологическое обследование",
-    description_az: "EKQ, exokardioqrafiya və ürək-damar sistemininin tam diaqnostikası.",
-    description_ru: "ЭКГ, эхокардиография и полная диагностика сердечно-сосудистой системы.",
-  },
-  {
-    id: "fallback-svc-2",
-    title_az: "Nevroloji konsultasiya",
-    title_ru: "Неврологическая консультация",
-    description_az: "Sinir sistemi xəstəliklərinin diaqnostikası, baş ağrıları və osteoxondroz müalicəsi.",
-    description_ru: "Диагностика заболеваний нервной системы, лечение головных болей и остеохондроза.",
-  },
-  {
-    id: "fallback-svc-3",
-    title_az: "Endokrinologiya",
-    title_ru: "Эндокринология",
-    description_az: "Diabet, tiroid xəstəlikləri və metabolik pozğunluqların müayinəsi və müalicəsi.",
-    description_ru: "Обследование и лечение диабета, болезней щитовидной железы и метаболических нарушений.",
-  },
-  {
-    id: "fallback-svc-4",
-    title_az: "Laborator analizlər",
-    title_ru: "Лабораторные анализы",
-    description_az: "Qan, sidik və digər analizlərin sürətli və dəqiq nəticələrlə aparılması.",
-    description_ru: "Проведение анализов крови, мочи и других исследований с быстрыми и точными результатами.",
-  },
-  {
-    id: "fallback-svc-5",
-    title_az: "UZI diaqnostikası",
-    title_ru: "УЗИ диагностика",
-    description_az: "Daxili orqanların, qalxanabənzər vəzinin və damarların ultrasəs müayinəsi.",
-    description_ru: "Ультразвуковое исследование внутренних органов, щитовидной железы и сосудов.",
-  },
-  {
-    id: "fallback-svc-6",
-    title_az: "Ümumi terapevt",
-    title_ru: "Общая терапия",
-    description_az: "İlkin müayinə, xəstəliklərin qarşısının alınması və müvafiq mütəxəssislərə yönləndirilmə.",
-    description_ru: "Первичный осмотр, профилактика заболеваний и направление к профильным специалистам.",
-  },
+  // Daimi xidmətlər
+  { id: "fallback-svc-1",  title_az: "USM müayinə",                              title_ru: "УЗИ обследование",                        description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-2",  title_az: "Fizioterapiya",                             title_ru: "Физиотерапия",                            description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-3",  title_az: "Pediatrik müayinə",                         title_ru: "Педиатрический осмотр",                   description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-4",  title_az: "Kardiologiya xidməti (Exo, EKQ)",           title_ru: "Кардиология (ЭхоКГ, ЭКГ)",               description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-5",  title_az: "Elektroensefaloqrafiya (EEQ)",              title_ru: "Электроэнцефалография (ЭЭГ)",             description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-6",  title_az: "Nevroloji xidmət",                          title_ru: "Неврологические услуги",                  description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-7",  title_az: "Dermatologiya",                             title_ru: "Дерматология",                            description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-8",  title_az: "Rentgenoloji xidmət",                       title_ru: "Рентгенологические услуги",               description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-9",  title_az: "Laboratoriya xidməti (hər növ analizlər)", title_ru: "Лабораторные услуги (все виды анализов)", description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-10", title_az: "Ginekologiya",                              title_ru: "Гинекология",                             description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-11", title_az: "Terapevtik xidmət",                         title_ru: "Терапевтические услуги",                  description_az: null, description_ru: null, is_guest_service: false },
+  { id: "fallback-svc-12", title_az: "Uşaqlar üçün psixoloq xidməti",            title_ru: "Услуги психолога для детей",              description_az: null, description_ru: null, is_guest_service: false },
+  // Qonaq həkim xidmətləri
+  { id: "fallback-svc-13", title_az: "Psixoterapevtik xidmət",                    title_ru: "Психотерапевтические услуги",             description_az: null, description_ru: null, is_guest_service: true },
+  { id: "fallback-svc-14", title_az: "Göz həkimi",                                title_ru: "Офтальмолог",                             description_az: null, description_ru: null, is_guest_service: true },
+  { id: "fallback-svc-15", title_az: "Travmatoloji-ortopedik",                    title_ru: "Травматология-ортопедия",                 description_az: null, description_ru: null, is_guest_service: true },
+  { id: "fallback-svc-16", title_az: "Nevroloji",                                 title_ru: "Неврология",                              description_az: null, description_ru: null, is_guest_service: true },
+  { id: "fallback-svc-17", title_az: "Pediatrik",                                 title_ru: "Педиатрия",                               description_az: null, description_ru: null, is_guest_service: true },
+  { id: "fallback-svc-18", title_az: "Uroloq - Androloq",                         title_ru: "Уролог - Андролог",                       description_az: null, description_ru: null, is_guest_service: true },
+  { id: "fallback-svc-19", title_az: "Endokrinoloji xidmət",                      title_ru: "Эндокринология",                          description_az: null, description_ru: null, is_guest_service: true },
 ];
