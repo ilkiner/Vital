@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import type { PriceCategory } from "@/lib/pricing-data";
@@ -84,188 +84,279 @@ function DefaultIcon() {
   );
 }
 
+function Highlight({ text, query }: { text: string; query: string }) {
+  if (!query) return <>{text}</>;
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="rounded px-0.5" style={{ background: "var(--color-primary-muted)", color: "var(--color-primary)", fontWeight: 600 }}>
+        {text.slice(idx, idx + query.length)}
+      </mark>
+      {text.slice(idx + query.length)}
+    </>
+  );
+}
+
 export default function PricingAccordion({ categories, locale, contactHref }: Props) {
-  const [openSet, setOpenSet] = useState<Set<number>>(new Set());
+  const [query, setQuery] = useState("");
+  const [manualOpen, setManualOpen] = useState<Set<number>>(new Set());
   const reduced = useReducedMotion() ?? false;
 
-  const askPrice = locale === "az" ? "Soruşun" : "Узнать";
-  const askPriceFull = locale === "az" ? "Qiymət üçün soruşun" : "Спросите цену";
-  const contactLabel = locale === "az" ? "Əlaqə" : "Связаться";
+  const isSearching = query.trim().length > 0;
+  const q = query.trim().toLowerCase();
 
-  function toggle(i: number) {
-    setOpenSet((prev) => {
+  const filtered = useMemo(() => {
+    if (!q) return categories.map((cat, i) => ({ ...cat, idx: i, items: cat.items }));
+    return categories
+      .map((cat, i) => {
+        const catTitleMatch =
+          cat.title_az.toLowerCase().includes(q) ||
+          cat.title_ru.toLowerCase().includes(q);
+        const matchedItems = catTitleMatch
+          ? cat.items
+          : cat.items.filter((item) => item.name_az.toLowerCase().includes(q));
+        return { ...cat, idx: i, items: matchedItems };
+      })
+      .filter((cat) => cat.items.length > 0);
+  }, [q, categories]);
+
+  const totalMatches = filtered.reduce((s, c) => s + c.items.length, 0);
+
+  function isOpen(idx: number) {
+    if (isSearching) return true;
+    return manualOpen.has(idx);
+  }
+
+  function toggle(idx: number) {
+    setManualOpen((prev) => {
       const next = new Set(prev);
-      next.has(i) ? next.delete(i) : next.add(i);
+      next.has(idx) ? next.delete(idx) : next.add(idx);
       return next;
     });
   }
 
+  const askPrice     = locale === "az" ? "Soruşun"   : "Узнать";
+  const askPriceFull = locale === "az" ? "Qiymət üçün soruşun" : "Спросите цену";
+  const contactLabel = locale === "az" ? "Əlaqə"     : "Связаться";
+  const placeholder  = locale === "az"
+    ? "Analiz axtar… (məs. TSH, Vitamin D, Rentgen)"
+    : "Поиск анализа… (напр. ТТГ, Витамин D, Рентген)";
+  const noResults    = locale === "az"
+    ? "Heç bir nəticə tapılmadı."
+    : "Результатов не найдено.";
+
   return (
-    <div className="space-y-2">
-      {categories.map((cat, i) => {
-        const isOpen = openSet.has(i);
-        const title = locale === "az" ? cat.title_az : cat.title_ru;
-        const icon = CATEGORY_ICONS[cat.title_az] ?? <DefaultIcon />;
-
-        return (
-          <motion.div
-            key={cat.title_az}
-            className="rounded-2xl border overflow-hidden transition-colors duration-200"
-            style={{
-              borderColor: isOpen ? "var(--color-primary-500)" : "var(--color-border)",
-              background: isOpen ? "white" : "white",
-            }}
-            initial={reduced ? false : { opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-20px" }}
-            transition={{ duration: 0.34, delay: reduced ? 0 : Math.min(i * 0.035, 0.25), ease }}
+    <div>
+      {/* Search bar */}
+      <div className="relative mb-6">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--color-text-muted)" }}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </span>
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={placeholder}
+          className="w-full bg-white border rounded-2xl pl-10 pr-10 py-3.5 text-[0.9rem] outline-none transition-all duration-200"
+          style={{
+            borderColor: query ? "var(--color-primary-500)" : "var(--color-border)",
+            boxShadow: query ? "0 0 0 3px var(--color-primary-muted)" : undefined,
+            color: "var(--color-text)",
+          }}
+        />
+        {query && (
+          <button
+            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-0.5 transition-colors duration-150"
+            style={{ color: "var(--color-text-muted)" }}
+            onClick={() => setQuery("")}
+            aria-label="Təmizlə"
           >
-            {/* Accordion header */}
-            <button
-              className="w-full flex items-center gap-4 px-5 py-4 text-left group"
-              onClick={() => toggle(i)}
-              aria-expanded={isOpen}
-            >
-              {/* Icon */}
-              <span
-                className="flex-none w-9 h-9 rounded-xl flex items-center justify-center transition-colors duration-200"
-                style={{
-                  background: isOpen ? "var(--color-primary)" : "var(--color-primary-muted)",
-                  color: isOpen ? "white" : "var(--color-primary)",
-                }}
-              >
-                {icon}
-              </span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        )}
+      </div>
 
-              {/* Title + count */}
-              <span className="flex-1 min-w-0 flex items-center gap-2.5">
+      {/* Search result summary */}
+      <AnimatePresence>
+        {isSearching && (
+          <motion.p
+            key="summary"
+            className="text-[0.8rem] mb-4 font-medium"
+            style={{ color: totalMatches > 0 ? "var(--color-primary)" : "var(--color-text-muted)" }}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18 }}
+          >
+            {totalMatches > 0
+              ? locale === "az"
+                ? `${totalMatches} nəticə tapıldı`
+                : `Найдено ${totalMatches} результатов`
+              : noResults}
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      {/* Accordion list */}
+      <div className="space-y-2">
+        {filtered.map((cat) => {
+          const open = isOpen(cat.idx);
+          const title = locale === "az" ? cat.title_az : cat.title_ru;
+          const icon = CATEGORY_ICONS[cat.title_az] ?? <DefaultIcon />;
+
+          return (
+            <motion.div
+              key={cat.title_az}
+              className="rounded-2xl border overflow-hidden"
+              style={{ borderColor: open ? "var(--color-primary-500)" : "var(--color-border)" }}
+              layout={!reduced}
+              initial={reduced ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.28, ease }}
+            >
+              {/* Header */}
+              <button
+                className="w-full flex items-center gap-4 px-5 py-4 text-left bg-white"
+                onClick={() => !isSearching && toggle(cat.idx)}
+                aria-expanded={open}
+                style={{ cursor: isSearching ? "default" : "pointer" }}
+              >
                 <span
-                  className="font-semibold text-[0.9rem] leading-snug transition-colors duration-200 truncate"
-                  style={{ color: isOpen ? "var(--color-primary)" : "var(--color-text)" }}
-                >
-                  {title}
-                </span>
-                <span
-                  className="flex-none inline-flex items-center rounded-full px-2 py-0.5 text-[0.65rem] font-bold tabular-nums transition-colors duration-200"
+                  className="flex-none w-9 h-9 rounded-xl flex items-center justify-center transition-colors duration-200"
                   style={{
-                    background: isOpen ? "var(--color-primary-muted)" : "var(--color-surface-alt)",
-                    color: isOpen ? "var(--color-primary)" : "var(--color-text-muted)",
+                    background: open ? "var(--color-primary)" : "var(--color-primary-muted)",
+                    color: open ? "white" : "var(--color-primary)",
                   }}
                 >
-                  {cat.items.length}
+                  {icon}
                 </span>
-              </span>
 
-              {/* Chevron */}
-              <motion.span
-                className="flex-none w-7 h-7 rounded-full border flex items-center justify-center transition-colors duration-200"
-                style={{
-                  borderColor: isOpen ? "var(--color-primary-500)" : "var(--color-border)",
-                  color: isOpen ? "var(--color-primary)" : "var(--color-text-muted)",
-                }}
-                animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: reduced ? 0 : 0.22, ease }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </motion.span>
-            </button>
+                <span className="flex-1 min-w-0 flex items-center gap-2.5">
+                  <span
+                    className="font-semibold text-[0.9rem] leading-snug transition-colors duration-200"
+                    style={{ color: open ? "var(--color-primary)" : "var(--color-text)" }}
+                  >
+                    <Highlight text={title} query={isSearching ? query.trim() : ""} />
+                  </span>
+                  <span
+                    className="flex-none inline-flex items-center rounded-full px-2 py-0.5 text-[0.65rem] font-bold tabular-nums transition-colors duration-200"
+                    style={{
+                      background: open ? "var(--color-primary-muted)" : "var(--color-surface-alt)",
+                      color: open ? "var(--color-primary)" : "var(--color-text-muted)",
+                    }}
+                  >
+                    {cat.items.length}
+                  </span>
+                </span>
 
-            {/* Accordion body */}
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  key="body"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: reduced ? 0 : 0.26, ease }}
-                  style={{ overflow: "hidden" }}
-                >
-                  {/* Table */}
-                  <div className="border-t border-[var(--color-border-light)]">
-                    {cat.items.map((item, j) => (
-                      <div
-                        key={j}
-                        className="flex items-center justify-between px-5 py-3 group/row"
-                        style={{
-                          background: j % 2 === 0 ? "white" : "var(--color-surface-alt)",
-                          borderBottom: j < cat.items.length - 1 ? "1px solid var(--color-border-light)" : undefined,
-                        }}
-                      >
-                        {/* Name */}
-                        <span className="text-[0.845rem] text-[var(--color-text)] flex-1 pr-3 leading-snug">
-                          {item.name_az}
-                        </span>
+                {!isSearching && (
+                  <motion.span
+                    className="flex-none w-7 h-7 rounded-full border flex items-center justify-center transition-colors duration-200"
+                    style={{
+                      borderColor: open ? "var(--color-primary-500)" : "var(--color-border)",
+                      color: open ? "var(--color-primary)" : "var(--color-text-muted)",
+                    }}
+                    animate={{ rotate: open ? 180 : 0 }}
+                    transition={{ duration: reduced ? 0 : 0.22, ease }}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </motion.span>
+                )}
+              </button>
 
-                        {/* Price + action */}
-                        <div className="flex items-center gap-2.5 flex-none">
-                          {item.price ? (
-                            <span
-                              className="inline-flex items-center rounded-lg px-2.5 py-1 text-[0.8rem] font-bold tabular-nums whitespace-nowrap"
-                              style={{
-                                background: "var(--color-primary-muted)",
-                                color: "var(--color-primary)",
+              {/* Body */}
+              <AnimatePresence initial={false}>
+                {open && (
+                  <motion.div
+                    key="body"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: reduced ? 0 : 0.26, ease }}
+                    style={{ overflow: "hidden" }}
+                  >
+                    <div className="border-t border-[var(--color-border-light)]">
+                      {cat.items.map((item, j) => (
+                        <div
+                          key={j}
+                          className="flex items-center justify-between px-5 py-3 group/row"
+                          style={{
+                            background: j % 2 === 0 ? "white" : "var(--color-surface-alt)",
+                            borderBottom: j < cat.items.length - 1 ? "1px solid var(--color-border-light)" : undefined,
+                          }}
+                        >
+                          <span className="text-[0.845rem] text-[var(--color-text)] flex-1 pr-3 leading-snug">
+                            <Highlight text={item.name_az} query={isSearching ? query.trim() : ""} />
+                          </span>
+                          <div className="flex items-center gap-2.5 flex-none">
+                            {item.price ? (
+                              <span
+                                className="inline-flex items-center rounded-lg px-2.5 py-1 text-[0.8rem] font-bold tabular-nums whitespace-nowrap"
+                                style={{ background: "var(--color-primary-muted)", color: "var(--color-primary)" }}
+                              >
+                                {item.price}
+                              </span>
+                            ) : (
+                              <span className="text-[0.75rem] text-[var(--color-text-subtle)] italic whitespace-nowrap">
+                                {askPriceFull}
+                              </span>
+                            )}
+                            <Link
+                              href={contactHref}
+                              className="opacity-0 group-hover/row:opacity-100 focus:opacity-100 px-2.5 py-1 rounded-lg text-[0.72rem] font-semibold whitespace-nowrap transition-all duration-150"
+                              style={{ background: "var(--color-primary-muted)", color: "var(--color-primary)" }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-primary)";
+                                (e.currentTarget as HTMLAnchorElement).style.color = "white";
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-primary-muted)";
+                                (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-primary)";
                               }}
                             >
-                              {item.price}
-                            </span>
-                          ) : (
-                            <span className="text-[0.75rem] text-[var(--color-text-subtle)] italic whitespace-nowrap">
-                              {askPriceFull}
-                            </span>
-                          )}
-                          <Link
-                            href={contactHref}
-                            className="opacity-0 group-hover/row:opacity-100 focus:opacity-100 px-2.5 py-1 rounded-lg text-[0.72rem] font-semibold whitespace-nowrap transition-all duration-150"
-                            style={{
-                              background: "var(--color-primary-muted)",
-                              color: "var(--color-primary)",
-                            }}
-                            onMouseEnter={(e) => {
-                              (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-primary)";
-                              (e.currentTarget as HTMLAnchorElement).style.color = "white";
-                            }}
-                            onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-primary-muted)";
-                              (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-primary)";
-                            }}
-                          >
-                            {askPrice}
-                          </Link>
+                              {askPrice}
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
 
-                    {/* Category footer CTA */}
-                    <div
-                      className="flex items-center justify-between px-5 py-3.5"
-                      style={{ background: "var(--color-primary-muted)" }}
-                    >
-                      <span className="text-[0.78rem] text-[var(--color-primary-500)]">
-                        {locale === "az"
-                          ? `${cat.items.length} analiz · qiymət barədə soruşa bilərsiniz`
-                          : `${cat.items.length} анализов · можете уточнить цену`}
-                      </span>
-                      <Link
-                        href={contactHref}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[0.75rem] font-semibold transition-colors duration-200"
-                        style={{ background: "var(--color-primary)", color: "white" }}
+                      {/* Category footer */}
+                      <div
+                        className="flex items-center justify-between px-5 py-3.5"
+                        style={{ background: "var(--color-primary-muted)" }}
                       >
-                        {contactLabel}
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
+                        <span className="text-[0.78rem]" style={{ color: "var(--color-primary-500)" }}>
+                          {locale === "az"
+                            ? `${cat.items.length} analiz · qiymət barədə soruşa bilərsiniz`
+                            : `${cat.items.length} анализов · можете уточнить цену`}
+                        </span>
+                        <Link
+                          href={contactHref}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[0.75rem] font-semibold transition-colors duration-200"
+                          style={{ background: "var(--color-primary)", color: "white" }}
+                        >
+                          {contactLabel}
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                          </svg>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        );
-      })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 }
