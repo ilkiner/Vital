@@ -17,14 +17,15 @@ async function getFeaturedDoctors() {
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from("doctors")
-      .select("id, name, specialty_az, specialty_ru, image_url, is_guest")
+      .select("id, name, specialty_az, specialty_ru, image_url, is_guest, visit_date")
       .eq("is_featured_this_week", true)
       .order("name");
 
-    if (error || !data || data.length === 0) return FALLBACK_DOCTORS;
+    if (error || !data || data.length === 0)
+      return FALLBACK_DOCTORS.filter((d) => d.is_featured_this_week);
     return data;
   } catch {
-    return FALLBACK_DOCTORS;
+    return FALLBACK_DOCTORS.filter((d) => d.is_featured_this_week);
   }
 }
 

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabaseClient } from "@/lib/supabaseServer";
+import { FALLBACK_DOCTORS } from "@/lib/fallback-data";
 
 export const metadata: Metadata = { title: "Həkimlər" };
 
@@ -14,27 +15,31 @@ type Doctor = {
   image_url: string | null;
   is_guest: boolean;
   is_featured_this_week: boolean;
+  visit_date?: string | null;
 };
 
-const MOCK_DOCTORS: Doctor[] = [
-  { id: "mock-1", name: "Dr. Aynur Hüseynova",  specialty_az: "Dermatoloq",  specialty_ru: "Дерматолог",  image_url: null, is_guest: true,  is_featured_this_week: true  },
-  { id: "mock-2", name: "Dr. Kamran Əliyev",     specialty_az: "Kardioloq",   specialty_ru: "Кардиолог",   image_url: null, is_guest: false, is_featured_this_week: false },
-  { id: "mock-3", name: "Dr. Nigar Məmmədova",   specialty_az: "Nevroloq",    specialty_ru: "Невролог",    image_url: null, is_guest: false, is_featured_this_week: true  },
-  { id: "mock-4", name: "Dr. Rauf Əsədov",       specialty_az: "Ortoped",     specialty_ru: "Ортопед",     image_url: null, is_guest: true,  is_featured_this_week: false },
-  { id: "mock-5", name: "Dr. Leyla Rzayeva",     specialty_az: "Endokrinoloq",specialty_ru: "Эндокринолог",image_url: null, is_guest: false, is_featured_this_week: false },
-  { id: "mock-6", name: "Dr. Tural Həsənov",     specialty_az: "Cərrah",      specialty_ru: "Хирург",      image_url: null, is_guest: false, is_featured_this_week: false },
-];
+const AZ_TO_RU_MONTHS: Record<string, string> = {
+  Yanvar: "Январь", Fevral: "Февраль", Mart: "Март", Aprel: "Апрель",
+  May: "Май", İyun: "Июнь", İyul: "Июль", Avqust: "Август",
+  Sentyabr: "Сентябрь", Oktyabr: "Октябрь", Noyabr: "Ноябрь", Dekabr: "Декабрь",
+};
+
+function formatVisitDate(date: string, locale: "az" | "ru"): string {
+  if (locale === "az") return date;
+  const [day, month] = date.split(" ");
+  return `${day} ${AZ_TO_RU_MONTHS[month] ?? month}`;
+}
 
 async function getAllDoctors(): Promise<Doctor[]> {
   try {
     const supabase = await createServerSupabaseClient();
     const { data } = await supabase
       .from("doctors")
-      .select("id, name, specialty_az, specialty_ru, image_url, is_guest, is_featured_this_week")
+      .select("id, name, specialty_az, specialty_ru, image_url, is_guest, is_featured_this_week, visit_date")
       .order("name");
     if (data && data.length > 0) return data as Doctor[];
   } catch {}
-  return MOCK_DOCTORS;
+  return FALLBACK_DOCTORS;
 }
 
 export default async function DoctorsPage() {
@@ -79,7 +84,7 @@ export default async function DoctorsPage() {
       <div className="bg-[var(--color-surface-alt)] section-padding">
         <div className="container-page space-y-16">
 
-          {/* Guest / davetli həkimlər */}
+          {/* Dəvətli həkimlər */}
           {guestDoctors.length > 0 && (
             <section>
               <div className="flex items-center gap-3 mb-8">
@@ -88,20 +93,20 @@ export default async function DoctorsPage() {
                 </span>
                 <div className="flex-1 h-px bg-[var(--color-border-light)]" />
               </div>
-              <DoctorGrid doctors={guestDoctors} locale={locale} doctorHref={doctorHref} />
+              <DoctorGrid doctors={guestDoctors} locale={locale} doctorHref={doctorHref} formatVisitDate={formatVisitDate} />
             </section>
           )}
 
-          {/* Daimi heyət */}
+          {/* Kadrolu heyət */}
           {staffDoctors.length > 0 && (
             <section>
               <div className="flex items-center gap-3 mb-8">
                 <span className="text-[0.68rem] font-bold uppercase tracking-[0.15em] text-[var(--color-primary-500)]">
-                  {locale === "az" ? "Daimi heyət" : "Постоянный персонал"}
+                  {locale === "az" ? "Kadrolu heyət" : "Штатный персонал"}
                 </span>
                 <div className="flex-1 h-px bg-[var(--color-border-light)]" />
               </div>
-              <DoctorGrid doctors={staffDoctors} locale={locale} doctorHref={doctorHref} />
+              <DoctorGrid doctors={staffDoctors} locale={locale} doctorHref={doctorHref} formatVisitDate={formatVisitDate} />
             </section>
           )}
 
@@ -115,22 +120,31 @@ function DoctorGrid({
   doctors,
   locale,
   doctorHref,
+  formatVisitDate,
 }: {
   doctors: Doctor[];
   locale: "az" | "ru";
   doctorHref: (id: string) => string;
+  formatVisitDate: (d: string, l: "az" | "ru") => string;
 }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
       {doctors.map((doctor) => (
         <Link key={doctor.id} href={doctorHref(doctor.id)} className="group">
           <div className="bg-white rounded-[1.25rem] overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-primary-500)] hover:shadow-md transition-all duration-250">
-            {/* Photo */}
-            <div className="relative bg-[var(--color-primary-muted)] overflow-hidden" style={{ aspectRatio: "3/4" }}>
+            {/* Photo — 3:4 portrait ratio */}
+            <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
               {doctor.image_url ? (
-                <Image src={doctor.image_url} alt={doctor.name} fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" />
+                <Image
+                  src={doctor.image_url}
+                  alt={doctor.name}
+                  fill
+                  className="object-cover"
+                  style={{ objectPosition: "center 15%" }}
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="w-full h-full bg-[var(--color-primary-muted)] flex items-center justify-center">
                   <PersonIcon className="w-16 h-16 text-[var(--color-primary-light)] opacity-60" />
                 </div>
               )}
@@ -140,12 +154,14 @@ function DoctorGrid({
                   {locale === "az" ? "Dəvətli" : "Гость"}
                 </span>
               )}
-              {doctor.is_featured_this_week && (
-                <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[var(--color-primary-500)]" title={locale === "az" ? "Bu həftə" : "Эта неделя"} />
+              {doctor.visit_date && (
+                <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 bg-white/90 text-[var(--color-primary)] text-[0.62rem] font-bold rounded-full shadow-sm">
+                  {formatVisitDate(doctor.visit_date, locale)}
+                </span>
               )}
             </div>
             {/* Info */}
-            <div className="px-4 pt-3.5 pb-4">
+            <div className="px-3.5 pt-3 pb-3.5">
               <p className="font-semibold text-[0.88rem] text-[var(--color-text)] leading-snug">{doctor.name}</p>
               <p className="text-[0.78rem] font-medium text-[var(--color-primary-500)] mt-0.5">
                 {locale === "az" ? doctor.specialty_az : doctor.specialty_ru}

@@ -10,6 +10,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/dermatovenerolog.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   {
     id: "fallback-perm-2",
@@ -21,6 +22,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/kardioloq.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   {
     id: "fallback-perm-3",
@@ -32,6 +34,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/nevropatoloq.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   {
     id: "fallback-perm-4",
@@ -43,6 +46,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/pediatr.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   {
     id: "fallback-perm-5",
@@ -54,6 +58,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/psixoloq.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   {
     id: "fallback-perm-6",
@@ -65,6 +70,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/texnikreabilitoloq.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   {
     id: "fallback-perm-7",
@@ -76,6 +82,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/uzmanfizioterapevt.jpg.jpeg",
     is_guest: false,
     is_featured_this_week: false,
+    visit_date: null,
   },
   // ── Davetli həkimlər ──
   {
@@ -88,6 +95,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetliginekologuzist.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: true,
+    visit_date: "18 Yanvar",
   },
   {
     id: "fallback-guest-2",
@@ -99,6 +107,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetlinevropotoloq.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: true,
+    visit_date: "25 Yanvar",
   },
   {
     id: "fallback-guest-3",
@@ -110,6 +119,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetliortopedtravmatoloq.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: true,
+    visit_date: "25 Yanvar",
   },
   {
     id: "fallback-guest-4",
@@ -121,6 +131,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetlipediatr.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: false,
+    visit_date: "26 Aprel",
   },
   {
     id: "fallback-guest-5",
@@ -132,6 +143,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetlipsixoterapevt.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: false,
+    visit_date: "06 Yanvar",
   },
   {
     id: "fallback-guest-6",
@@ -143,6 +155,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetliT.E.Noftalmoloq.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: false,
+    visit_date: "04 Fevral",
   },
   {
     id: "fallback-guest-7",
@@ -154,6 +167,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetliuroloq-androloq.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: false,
+    visit_date: "25 Yanvar",
   },
   {
     id: "fallback-guest-8",
@@ -165,6 +179,7 @@ export const FALLBACK_DOCTORS = [
     image_url: "/images/doctors/devetliUSMhekim.jpg.jpeg",
     is_guest: true,
     is_featured_this_week: true,
+    visit_date: "26 Aprel",
   },
 ];
 

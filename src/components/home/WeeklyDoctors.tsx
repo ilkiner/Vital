@@ -15,11 +15,24 @@ type Doctor = {
   specialty_ru: string;
   image_url: string | null;
   is_guest: boolean;
+  visit_date?: string | null;
 };
 
 type Props = { doctors: Doctor[]; locale: "az" | "ru" };
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
+
+const AZ_TO_RU_MONTHS: Record<string, string> = {
+  Yanvar: "Январь", Fevral: "Февраль", Mart: "Март", Aprel: "Апрель",
+  May: "Май", İyun: "Июнь", İyul: "Июль", Avqust: "Август",
+  Sentyabr: "Сентябрь", Oktyabr: "Октябрь", Noyabr: "Ноябрь", Dekabr: "Декабрь",
+};
+
+function formatVisitDate(date: string, locale: "az" | "ru"): string {
+  if (locale === "az") return date;
+  const [day, month] = date.split(" ");
+  return `${day} ${AZ_TO_RU_MONTHS[month] ?? month}`;
+}
 
 export default function WeeklyDoctors({ doctors, locale }: Props) {
   const t = useTranslations("home");
@@ -68,7 +81,7 @@ export default function WeeklyDoctors({ doctors, locale }: Props) {
         <div className="flex items-end justify-between mb-10">
           <motion.div {...headerAnim}>
             <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-primary-500)] mb-2">
-              {locale === "az" ? "Bu həftə" : "На этой неделе"}
+              {locale === "az" ? "Bu ay" : "В этом месяце"}
             </span>
             <h2 className="font-display text-[1.75rem] md:text-[2.1rem] font-medium text-[var(--color-text)] leading-tight">
               {locale === "az" ? (
@@ -120,27 +133,27 @@ export default function WeeklyDoctors({ doctors, locale }: Props) {
             {doctors.map((doctor, i) => (
               <motion.div
                 key={doctor.id}
-                className="flex-none w-[220px] md:w-[240px] lg:w-[260px]"
+                className="flex-none w-[200px] md:w-[220px] lg:w-[240px]"
                 {...cardAnim(i)}
               >
                 <Link href={doctorHref(doctor.id)}>
                   <motion.div
                     className="bg-[var(--color-surface-alt)] rounded-[1.25rem] overflow-hidden border border-[var(--color-border)] group cursor-pointer"
                     whileHover={reduced ? {} : { y: -4, transition: { duration: 0.2, ease: "easeOut" } }}
-                    style={{ boxShadow: "0 0 0 0 rgba(6,78,59,0)" }}
                   >
-                    {/* Photo */}
-                    <div className="relative h-52 bg-[var(--color-primary-muted)] overflow-hidden">
+                    {/* Photo — 3:4 portrait for proper face framing */}
+                    <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
                       {doctor.image_url ? (
                         <Image
                           src={doctor.image_url}
                           alt={doctor.name}
                           fill
-                          className="object-cover object-top"
-                          sizes="260px"
+                          className="object-cover"
+                          style={{ objectPosition: "center 15%" }}
+                          sizes="240px"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full bg-[var(--color-primary-muted)] flex items-center justify-center">
                           <PersonIcon className="w-16 h-16 text-[var(--color-primary-light)]" />
                         </div>
                       )}
@@ -149,25 +162,30 @@ export default function WeeklyDoctors({ doctors, locale }: Props) {
                         className="absolute inset-0"
                         style={{
                           background:
-                            "linear-gradient(to bottom, transparent 55%, rgba(245,248,250,0.7) 100%)",
+                            "linear-gradient(to bottom, transparent 55%, rgba(245,248,250,0.75) 100%)",
                         }}
                       />
                       {doctor.is_guest && (
-                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-[var(--color-primary)] text-white text-[0.65rem] font-semibold rounded-full tracking-wide">
+                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-[var(--color-primary)] text-white text-[0.62rem] font-semibold rounded-full tracking-wide">
                           {tDoc("guestBadge")}
+                        </span>
+                      )}
+                      {doctor.visit_date && (
+                        <span className="absolute bottom-3 right-3 px-2.5 py-1 bg-white/90 text-[var(--color-primary)] text-[0.62rem] font-bold rounded-full shadow-sm">
+                          {formatVisitDate(doctor.visit_date, locale)}
                         </span>
                       )}
                     </div>
 
                     {/* Info */}
-                    <div className="px-4 pt-3.5 pb-4">
-                      <p className="font-semibold text-[0.9rem] text-[var(--color-text)] leading-snug">
+                    <div className="px-3.5 pt-3 pb-3.5">
+                      <p className="font-semibold text-[0.85rem] text-[var(--color-text)] leading-snug">
                         {doctor.name}
                       </p>
-                      <p className="text-[0.8rem] font-medium text-[var(--color-primary-500)] mt-0.5">
+                      <p className="text-[0.77rem] font-medium text-[var(--color-primary-500)] mt-0.5">
                         {locale === "az" ? doctor.specialty_az : doctor.specialty_ru}
                       </p>
-                      <div className="flex items-center gap-1 mt-3 text-[0.78rem] font-medium text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)] transition-colors duration-200">
+                      <div className="flex items-center gap-1 mt-2.5 text-[0.75rem] font-medium text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)] transition-colors duration-200">
                         <span>{t("viewProfile")}</span>
                         <svg className="w-3.5 h-3.5 translate-x-0 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
