@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { priceList } from "@/lib/pricing-data";
 import PricingAccordion from "./PricingAccordion";
 
+const totalItems = priceList.reduce((sum, cat) => sum + cat.items.length, 0);
+
 export const metadata: Metadata = { title: "Qiymətlər" };
 
 export default async function PricingPage() {
@@ -44,6 +46,34 @@ export default async function PricingPage() {
 
       <div className="bg-[var(--color-surface-alt)] section-padding">
         <div className="container-page max-w-3xl">
+          {/* Stat chips */}
+          <div className="flex flex-wrap gap-3 mb-8">
+            {[
+              {
+                label: locale === "az" ? "Analiz növü" : "Видов анализов",
+                value: totalItems,
+              },
+              {
+                label: locale === "az" ? "Kateqoriya" : "Категорий",
+                value: priceList.length,
+              },
+              {
+                label: locale === "az" ? "Nəticə müddəti" : "Срок результата",
+                value: locale === "az" ? "1–3 gün" : "1–3 дня",
+              },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="flex items-center gap-2.5 bg-white border border-[var(--color-border)] rounded-2xl px-4 py-3"
+              >
+                <span className="font-bold text-[1.1rem] tabular-nums" style={{ color: "var(--color-primary)" }}>
+                  {stat.value}
+                </span>
+                <span className="text-[0.78rem] text-[var(--color-text-muted)]">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
           <PricingAccordion
             categories={priceList}
             locale={locale}
