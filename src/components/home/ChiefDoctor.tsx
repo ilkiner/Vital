@@ -86,15 +86,16 @@ export default function ChiefDoctor({ locale }: Props) {
                   src={siteConfig.chiefDoctor.imageUrl}
                   alt={siteConfig.chiefDoctor.name}
                   fill
-                  className="object-cover object-top"
+                  className="object-cover"
+                  style={{ objectPosition: "center 5%" }}
                   sizes="(max-width: 768px) 280px, (max-width: 1024px) 320px, 360px"
                 />
-                {/* Subtle bottom fade */}
+                {/* Bottom fade — hides Instagram story text overlay */}
                 <div
                   aria-hidden
-                  className="absolute inset-0"
+                  className="absolute inset-x-0 bottom-0 h-36 pointer-events-none"
                   style={{
-                    background: "linear-gradient(to bottom, transparent 55%, color-mix(in srgb, var(--color-primary-light) 60%, transparent) 100%)",
+                    background: "linear-gradient(to bottom, transparent, var(--color-primary-light))",
                   }}
                 />
               </div>

@@ -328,11 +328,18 @@ export default function AboutClient({ locale }: Props) {
                   src={siteConfig.chiefDoctor.imageUrl}
                   alt={siteConfig.chiefDoctor.name}
                   fill
-                  className="object-cover object-top"
+                  className="object-cover"
+                  style={{ objectPosition: "center 5%" }}
                   sizes="(max-width: 1024px) 100vw, 320px"
                 />
               )}
-              {/* Gradient overlay on large screens */}
+              {/* Bottom fade — hides Instagram story text overlay */}
+              <div
+                aria-hidden
+                className="absolute inset-x-0 bottom-0 h-28 pointer-events-none"
+                style={{ background: "linear-gradient(to bottom, transparent, var(--color-primary-muted))" }}
+              />
+              {/* Right fade for desktop layout */}
               <div
                 aria-hidden
                 className="absolute inset-y-0 right-0 w-8 hidden lg:block"
