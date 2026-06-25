@@ -157,7 +157,7 @@ export default function PricingAccordion({ categories, locale, contactHref }: Pr
           </svg>
         </span>
         <input
-          type="search"
+          type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
