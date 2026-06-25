@@ -59,7 +59,7 @@ export const siteConfig = {
 
   // Başhekim (statik — DB'deki davetli doktorlardan ayrı)
   chiefDoctor: {
-    name: "Prof. Dr. [Ad Soyad]",       // TODO
+    name: "Dr. Yaşar Allahverdiyev",
     title: {
       az: "Baş həkim",
       ru: "Главный врач",

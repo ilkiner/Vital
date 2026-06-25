@@ -2,7 +2,7 @@ export const FALLBACK_DOCTORS = [
   // ── Daimi heyət ──
   {
     id: "fallback-perm-1",
-    name: "Ad Soyad",  // TODO: admin panelindən doldur
+    name: "Dr. Əfqan Abdullayev",
     specialty_az: "Dermatoloq-Venerologiya",
     specialty_ru: "Дерматовенерология",
     bio_az: "",
@@ -13,7 +13,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-perm-2",
-    name: "Ad Soyad",
+    name: "Dr. Firdovsi Məmmədov",
     specialty_az: "Kardioloq",
     specialty_ru: "Кардиолог",
     bio_az: "",
@@ -24,7 +24,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-perm-3",
-    name: "Ad Soyad",
+    name: "Dr. Cəlal Hüseynov",
     specialty_az: "Nevropatoloq",
     specialty_ru: "Невропатолог",
     bio_az: "",
@@ -35,7 +35,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-perm-4",
-    name: "Ad Soyad",
+    name: "Dr. Elgiz Kazımov",
     specialty_az: "Pediatr",
     specialty_ru: "Педиатр",
     bio_az: "",
@@ -46,7 +46,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-perm-5",
-    name: "Ad Soyad",
+    name: "Aygül Nəcəfova",
     specialty_az: "Psixoloq",
     specialty_ru: "Психолог",
     bio_az: "",
@@ -57,7 +57,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-perm-6",
-    name: "Ad Soyad",
+    name: "Fərid İsazadə",
     specialty_az: "Texniki Reabilitoloq",
     specialty_ru: "Технический реабилитолог",
     bio_az: "",
@@ -68,7 +68,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-perm-7",
-    name: "Ad Soyad",
+    name: "Dr. Müjgan Ələsgərli",
     specialty_az: "Fizioterapevt",
     specialty_ru: "Физиотерапевт",
     bio_az: "",
@@ -80,7 +80,7 @@ export const FALLBACK_DOCTORS = [
   // ── Davetli həkimlər ──
   {
     id: "fallback-guest-1",
-    name: "Ad Soyad",
+    name: "Dr. Xədicə Salmanova",
     specialty_az: "Ginekoloq-USM",
     specialty_ru: "Гинеколог-УЗИ",
     bio_az: "",
@@ -91,7 +91,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-2",
-    name: "Ad Soyad",
+    name: "Dr. Turan Musayeva",
     specialty_az: "Nevropatoloq",
     specialty_ru: "Невропатолог",
     bio_az: "",
@@ -102,7 +102,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-3",
-    name: "Ad Soyad",
+    name: "Dr. Sənan Aşirov",
     specialty_az: "Ortoped-Travmatoloq",
     specialty_ru: "Ортопед-Травматолог",
     bio_az: "",
@@ -113,7 +113,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-4",
-    name: "Ad Soyad",
+    name: "Dr. Kənan Qarayev",
     specialty_az: "Pediatr",
     specialty_ru: "Педиатр",
     bio_az: "",
@@ -124,7 +124,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-5",
-    name: "Ad Soyad",
+    name: "Dr. Bəxtiyar Mustafayev",
     specialty_az: "Psixoterapevt",
     specialty_ru: "Психотерапевт",
     bio_az: "",
@@ -135,7 +135,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-6",
-    name: "T.E.N.",
+    name: "Dr. Gülnarə Xasıyeva",
     specialty_az: "Oftalmologiya",
     specialty_ru: "Офтальмология",
     bio_az: "",
@@ -146,7 +146,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-7",
-    name: "Ad Soyad",
+    name: "Dr. Qardaşxan Mamedov",
     specialty_az: "Uroloq-Androloq",
     specialty_ru: "Уролог-Андролог",
     bio_az: "",
@@ -157,7 +157,7 @@ export const FALLBACK_DOCTORS = [
   },
   {
     id: "fallback-guest-8",
-    name: "Ad Soyad",
+    name: "Dr. Ruslan Gözəlov",
     specialty_az: "USM Həkimi",
     specialty_ru: "Врач УЗИ",
     bio_az: "",
