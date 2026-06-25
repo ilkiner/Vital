@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
@@ -46,9 +47,14 @@ export default function Navbar() {
       <nav className="container-page flex items-center justify-between h-16">
         {/* Logo */}
         <Link href={localePath("/")} className="flex items-center gap-2">
-          <span className="text-[var(--color-primary)] font-bold text-xl tracking-tight">
-            {siteConfig.name}
-          </span>
+          <Image
+            src="/images/doctors/logo.jpg.jpeg"
+            alt={siteConfig.name}
+            width={140}
+            height={40}
+            className="h-9 w-auto object-contain"
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}

@@ -68,7 +68,7 @@ export const siteConfig = {
       az: "[Baş həkimin təcrübəsi, ixtisası və özgəçmişi buraya yazılır — yer tutucu mətn.]",
       ru: "[Опыт, специализация и биография главного врача — текст-заглушка.]",
     } satisfies Localized,
-    imageUrl: "/images/chief-doctor.jpg",
+    imageUrl: "/images/doctors/bashekim.jpg.jpeg",
   },
 } as const;
 
